@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Xamarin.Forms.Controls</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Xamarin.Forms.CircularProgressBar</PackageId>
+    <Authors>Victor Kochetkov</Authors>
+    <Company></Company>
+    <Product />
+    <PackageIcon>nuget-icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/VictorKochetkov/Xamarin.Forms.CircularProgressBar</PackageProjectUrl>
+    <Description>Circular progress bar for Xamarin.Forms (Android and iOS)</Description>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="2.80.2" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="CircularProgressBar.xaml.cs">
+      <DependentUpon>CircularProgressBar.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="CircularProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Include="nuget\nuget-icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
