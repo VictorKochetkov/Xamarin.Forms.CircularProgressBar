@@ -9,17 +9,17 @@
         <StackLayout Spacing="60" Padding="32">
             <StackLayout>
                 <controls:CircularProgressBar x:Name="bar1" VerticalOptions="Center" WidthRequest="40" HeightRequest="50" Stroke="10" Color="#69f0ae"/>
-                <Label FontSize="Medium" Text="Static progress bar without easing" HorizontalTextAlignment="Center"/>
+                <Label FontSize="Medium" Text="Static progress bar without easing" HorizontalTextAlignment="Center" TextColor="#aaa"/>
             </StackLayout>
 
             <StackLayout>
                 <controls:CircularProgressBar x:Name="bar2" WidthRequest="40" HeightRequest="50" Stroke="10" Easing="True" Color="#69f0ae"/>
-                <Label FontSize="Medium" Text="Static progress bar with easing"  HorizontalTextAlignment="Center"/>
+                <Label FontSize="Medium" Text="Static progress bar with easing"  HorizontalTextAlignment="Center" TextColor="#aaa"/>
             </StackLayout>
 
             <StackLayout>
                 <controls:CircularProgressBar x:Name="bar3" WidthRequest="40" HeightRequest="50" Stroke="10" Spin="True" Color="#69f0ae"/>
-                <Label FontSize="Medium" Text="Spinning progress bar"  HorizontalTextAlignment="Center"/>
+                <Label FontSize="Medium" Text="Spinning progress bar"  HorizontalTextAlignment="Center" TextColor="#aaa"/>
             </StackLayout>
             
         </StackLayout>
