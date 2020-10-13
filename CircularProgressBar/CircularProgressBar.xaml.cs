@@ -259,8 +259,8 @@ namespace Xamarin.Forms.Controls
 
             double _angle = value / 100d * 360d;
 
-            double _startAngle = -90 + (360 - _angle) + _rotate;
-            double _sweepAngle = 360 - (360 - _angle);
+            double _startAngle = _rotate + 270;
+            double _sweepAngle = _angle;
 
             SKPath path = new SKPath();
             path.AddArc(rect, (float)_startAngle, (float)_sweepAngle);
