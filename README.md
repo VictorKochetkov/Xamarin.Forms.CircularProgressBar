@@ -1,4 +1,5 @@
 Circular progress bar for Xamarin.Forms (Android and iOS)
+
 <img src="https://github.com/VictorKochetkov/Xamarin.Forms.CircularProgressBar/blob/master/github/showcase.gif?raw=true" alt="showcase">
 
 # Quick start
