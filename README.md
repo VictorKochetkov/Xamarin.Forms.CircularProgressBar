@@ -1,4 +1,6 @@
-Circular progress bar for Xamarin.Forms (Android and iOS)
+# Xamarin.Forms.CircularProgressBar
+
+Easy to use circular progress bar for your Xamarin.Forms application (works on Android and iOS).
 
 <img src="https://github.com/VictorKochetkov/Xamarin.Forms.CircularProgressBar/blob/master/github/showcase.gif?raw=true" alt="showcase">
 
