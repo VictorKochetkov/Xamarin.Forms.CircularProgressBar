@@ -17,7 +17,7 @@ Spinning progress bar
 
 `<controls:CircularProgressBar WidthRequest="40" HeightRequest="40" Spin="True"/> `
 
-# Properties you would like to use:
+# Features
 `double Progress` - value of progress (in percents)
 
 `bool Spin` - should bar infinitly spinning
