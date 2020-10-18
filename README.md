@@ -27,3 +27,9 @@ Spinning progress bar
 `bool Easing` - should progress be changed with ease or instantly (ignored if `Spin` set to `true`)
 
 `double Stroke` - stroke of progress
+
+# Donate
+
+If you like this project you can support it by making a donation 🤗 Thank you!
+
+<a href="https://www.buymeacoffee.com/bananadev" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee"></a>
