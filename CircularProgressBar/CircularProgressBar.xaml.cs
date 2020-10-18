@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -32,7 +33,7 @@ namespace Xamarin.Forms.Controls
             nameof(Stroke),
             typeof(double),
             typeof(CircularProgressBar),
-            8d,
+            9d,
             propertyChanged: OnStrokePropertyChanged);
 
         public static readonly BindableProperty SpinProperty = BindableProperty.Create(
@@ -178,7 +179,7 @@ namespace Xamarin.Forms.Controls
                 Color = Color.ToSKColor(),
                 StrokeCap = SKStrokeCap.Round,
                 StrokeJoin = SKStrokeJoin.Round,
-                StrokeWidth = (float)Stroke,
+                StrokeWidth = (float)XamDIUConvertToPixels(Stroke),
                 IsAntialias = true,
             };
 
@@ -270,6 +271,19 @@ namespace Xamarin.Forms.Controls
 
             canvas.DrawPath(path, paint);
             canvas.DrawPath(pathBackground, paintBackground);
+        }
+
+
+        /// <summary>
+        /// https://stackoverflow.com/a/63615455/6499748
+        /// </summary>
+        /// <param name="XamDIU"></param>
+        /// <returns></returns>
+        private static double XamDIUConvertToPixels(double XamDIU)
+        {
+            var k = DeviceDisplay.MainDisplayInfo.Density / 2d;
+            var pixcels = k * XamDIU;
+            return pixcels;
         }
 
     }
