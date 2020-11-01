@@ -1,5 +1,7 @@
 # Xamarin.Forms.CircularProgressBar
 
+<img alt="Nuget" src="https://img.shields.io/nuget/v/Xamarin.Forms.CircularProgressBar"> <img alt="Nuget" src="https://img.shields.io/nuget/dt/Xamarin.Forms.CircularProgressBar">
+
 Easy to use circular progress bar for your Xamarin.Forms application (works on Android and iOS).
 
 https://www.nuget.org/packages/Xamarin.Forms.CircularProgressBar/
