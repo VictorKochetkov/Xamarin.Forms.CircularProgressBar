@@ -9,7 +9,7 @@
 
 
     <skia:SKCanvasView x:Name="canvas"
-                       HorizontalOptions="CenterAndExpand" 
-                       VerticalOptions="CenterAndExpand"/>
+                       HorizontalOptions="Fill" 
+                       VerticalOptions="Fill"/>
 
 </ContentView>
