@@ -8,17 +8,17 @@
     <ScrollView Padding="32">
         <StackLayout Spacing="60">
             <StackLayout>
-                <controls:CircularProgressBar x:Name="bar1" VerticalOptions="Center" WidthRequest="40" HeightRequest="50" Color="#69f0ae"/>
+                <controls:CircularProgressBar x:Name="bar1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="40" HeightRequest="40"  Color="#69f0ae"/>
                 <Label FontSize="Medium" Text="Static progress bar without easing" HorizontalTextAlignment="Center" TextColor="#aaa"/>
             </StackLayout>
 
             <StackLayout>
-                <controls:CircularProgressBar x:Name="bar2" WidthRequest="40" HeightRequest="50" Easing="True" Color="#69f0ae"/>
+                <controls:CircularProgressBar x:Name="bar2" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="40" HeightRequest="40" Easing="True" Color="#69f0ae"/>
                 <Label FontSize="Medium" Text="Static progress bar with easing"  HorizontalTextAlignment="Center" TextColor="#aaa"/>
             </StackLayout>
 
             <StackLayout>
-                <controls:CircularProgressBar x:Name="bar3" WidthRequest="40" HeightRequest="50" Spin="True" Color="#69f0ae"/>
+                <controls:CircularProgressBar x:Name="bar3" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="40" HeightRequest="40" Spin="True" Color="#69f0ae"/>
                 <Label FontSize="Medium" Text="Spinning progress bar"  HorizontalTextAlignment="Center" TextColor="#aaa"/>
             </StackLayout>
             
