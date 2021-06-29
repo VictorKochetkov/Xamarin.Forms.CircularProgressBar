@@ -11,15 +11,21 @@ https://www.nuget.org/packages/Xamarin.Forms.CircularProgressBar/
 # Quick start
 Static progress bar without easing
 
-`<controls:CircularProgressBar WidthRequest="40" HeightRequest="40"/>`
+```xaml
+<controls:CircularProgressBar WidthRequest="40" HeightRequest="40"/>
+```
 
 Static progress bar with easing
 
-`<controls:CircularProgressBar WidthRequest="40" HeightRequest="40" Easing="True"/>`
+```xaml
+<controls:CircularProgressBar WidthRequest="40" HeightRequest="40" Easing="True"/>
+```
 
 Spinning progress bar
 
-`<controls:CircularProgressBar WidthRequest="40" HeightRequest="40" Spin="True"/> `
+```xaml
+<controls:CircularProgressBar WidthRequest="40" HeightRequest="40" Spin="True"/>
+```
 
 # Features
 `double Progress` - value of progress (in percents)
