@@ -11,7 +11,7 @@
     <PackageIcon>nuget-icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/VictorKochetkov/Xamarin.Forms.CircularProgressBar</PackageProjectUrl>
     <Description>Circular progress bar for Xamarin.Forms (Android and iOS)</Description>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
   </PropertyGroup>
 
   <ItemGroup>
