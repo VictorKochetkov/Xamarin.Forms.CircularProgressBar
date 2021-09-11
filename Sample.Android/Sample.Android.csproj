@@ -90,7 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sample\Sample.csproj">
-      <Project>{279A0342-085A-4B42-813C-9CC732A72567}</Project>
+      <Project>{D8C7762B-879F-4160-8570-D963A1F46EE3}</Project>
       <Name>Sample</Name>
     </ProjectReference>
   </ItemGroup>
