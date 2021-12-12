@@ -36,6 +36,8 @@ Spinning progress bar
 
 `double Stroke` - stroke of progress
 
+`Color Color` - fill color of progress stroke
+
 # Donate
 
 If you like this project you can support it by making a donation 🤗 Thank you!
