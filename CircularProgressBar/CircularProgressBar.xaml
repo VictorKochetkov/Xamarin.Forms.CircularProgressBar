@@ -10,6 +10,7 @@
 
     <skia:SKCanvasView x:Name="canvas"
                        HorizontalOptions="Fill" 
-                       VerticalOptions="Fill"/>
+                       VerticalOptions="Fill"
+                       PaintSurface="CanvasPaintSurface"/>
 
 </ContentView>

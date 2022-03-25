@@ -1,222 +1,245 @@
-﻿using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Xamarin.Forms.Controls
 {
+    /// <summary>
+    /// Circulear progress bar view.
+    /// </summary>
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CircularProgressBar : ContentView
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        private const int PADDING = 2;
+
+        /// <summary>
+        /// Time elapsed from previous view draw.
+        /// </summary>
+        private readonly Stopwatch _time = new Stopwatch();
+
+        /// <summary>
+        /// Interval between view draws.
+        /// </summary>
+        private readonly TimeSpan _drawInterval = TimeSpan.FromMilliseconds(30);
+
+        /// <summary>
+        /// View draw frame.
+        /// </summary>
+        private SKRect frame;
+
+        /// <summary>
+        /// Stroke paint configuration.
+        /// </summary>
+        private SKPaint paint;
+
+        /// <summary>
+        /// Background paint configuration.
+        /// </summary>
+        private SKPaint paintBackground;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _easing = 0;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _rotate = 0;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _currentProgress;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _value;
+
+        /// <summary>
+        /// Bindable property of <see cref="Progress"/>.
+        /// </summary>
         public static readonly BindableProperty ProgressProperty = BindableProperty.Create(
             nameof(Progress),
             typeof(double),
             typeof(CircularProgressBar),
             0d,
-            propertyChanged: OnProgressPropertyChanged);
+            propertyChanged: (BindableObject bindable, object oldValue, object newValue) =>
+            {
+                ((CircularProgressBar)bindable)._easing = 0;
+                ((CircularProgressBar)bindable).canvas.InvalidateSurface();
+            });
 
+        /// <summary>
+        /// Bindable property of <see cref="Color"/>.
+        /// </summary>
         public static readonly BindableProperty ColorProperty = BindableProperty.Create(
             nameof(Color),
             typeof(Color),
             typeof(CircularProgressBar),
             Color.Accent,
-            propertyChanged: OnColorPropertyChanged);
+            propertyChanged: (BindableObject bindable, object oldValue, object newValue) =>
+            {
+                ((CircularProgressBar)bindable).UpdatePaint();
+                ((CircularProgressBar)bindable).canvas.InvalidateSurface();
+            });
 
+
+        /// <summary>
+        /// Bindable property of <see cref="Stroke"/>.
+        /// </summary>
         public static readonly BindableProperty StrokeProperty = BindableProperty.Create(
             nameof(Stroke),
             typeof(double),
             typeof(CircularProgressBar),
             9d,
-            propertyChanged: OnStrokePropertyChanged);
+            propertyChanged: (BindableObject bindable, object oldValue, object newValue) =>
+            {
+                ((CircularProgressBar)bindable).UpdatePaint();
+                ((CircularProgressBar)bindable).canvas.InvalidateSurface();
+            });
 
+        /// <summary>
+        /// Bindable property of <see cref="Spin"/>.
+        /// </summary>
         public static readonly BindableProperty SpinProperty = BindableProperty.Create(
             nameof(Spin),
             typeof(bool),
             typeof(CircularProgressBar),
             false,
-            propertyChanged: OnAnimatedPropertyChanged);
+            propertyChanged: (BindableObject bindable, object oldValue, object newValue) =>
+            {
+                ((CircularProgressBar)bindable).canvas.InvalidateSurface();
+            });
 
+        /// <summary>
+        /// Bindable property of <see cref="Easing"/>.
+        /// </summary>
         public static readonly BindableProperty EasingProperty = BindableProperty.Create(
             nameof(Easing),
             typeof(bool),
             typeof(CircularProgressBar),
             false,
-            propertyChanged: OnEasingPropertyChanged);
+            propertyChanged: (BindableObject bindable, object oldValue, object newValue) =>
+            {
+                ((CircularProgressBar)bindable).canvas.InvalidateSurface();
+            });
 
-
+        /// <summary>
+        /// Progress bar value (in percentages).
+        /// </summary>
         public double Progress
         {
             get => (double)GetValue(ProgressProperty);
             set
             {
-                this.currentProgress = (float)this.value;
+                _currentProgress = _value;
                 SetValue(ProgressProperty, Math.Max(0, Math.Min(100, value)));
             }
         }
 
-
+        /// <summary>
+        /// Progress bar stroke color.
+        /// </summary>
         public Color Color
         {
             get => (Color)GetValue(ColorProperty);
             set => SetValue(ColorProperty, value);
         }
 
+        /// <summary>
+        /// Progress bar stroke thickness.
+        /// </summary>
         public double Stroke
         {
             get => (double)GetValue(StrokeProperty);
             set => SetValue(StrokeProperty, value);
         }
 
+        /// <summary>
+        /// Should spin progress bar.
+        /// </summary>
         public bool Spin
         {
             get => (bool)GetValue(SpinProperty);
             set => SetValue(SpinProperty, value);
         }
 
+        /// <summary>
+        /// Should change progress bar <see cref="Value"/> with easing.
+        /// </summary>
         public bool Easing
         {
             get => (bool)GetValue(EasingProperty);
             set => SetValue(EasingProperty, value);
         }
 
-
         /// <summary>
-        /// 
+        /// Create new instance of <see cref="CircularProgressBar"/>.
         /// </summary>
-        /// <param name="bindable"></param>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        private static void OnProgressPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var view = (CircularProgressBar)bindable;
-            view._easing = 0;
-            view.canvas.InvalidateSurface();
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bindable"></param>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        private static void OnColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var view = (CircularProgressBar)bindable;
-            view.UpdatePaint();
-            view.canvas.InvalidateSurface();
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bindable"></param>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        private static void OnStrokePropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var view = (CircularProgressBar)bindable;
-            view.UpdatePaint();
-            view.canvas.InvalidateSurface();
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bindable"></param>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        private static void OnAnimatedPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var view = (CircularProgressBar)bindable;
-            view.canvas.InvalidateSurface();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bindable"></param>
-        /// <param name="oldValue"></param>
-        /// <param name="newValue"></param>
-        private static void OnEasingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var view = (CircularProgressBar)bindable;
-            view.canvas.InvalidateSurface();
-        }
-
-
-
         public CircularProgressBar()
         {
             UpdatePaint();
             InitializeComponent();
-            canvas.PaintSurface += Canvas_PaintSurface;
         }
 
-
-
+        /// <inheritdoc/>
         protected override void InvalidateLayout()
         {
             base.InvalidateLayout();
             canvas.InvalidateSurface();
         }
 
-
+        /// <summary>
+        /// Update <see cref="paint"/> and <see cref="paintBackground"/>.
+        /// </summary>
         private void UpdatePaint()
         {
-            paint = new SKPaint()
+            paint = new SKPaint
             {
                 Style = SKPaintStyle.Stroke,
                 Color = Color.ToSKColor(),
                 StrokeCap = SKStrokeCap.Round,
                 StrokeJoin = SKStrokeJoin.Round,
-                StrokeWidth = (float)XamDIUConvertToPixels(Stroke),
+                StrokeWidth = (float)ConvertToPixels(Stroke),
                 IsAntialias = true,
             };
 
             paintBackground = paint.Clone();
             paintBackground.StrokeWidth *= 0.9f;
-            paintBackground.Color = new SKColor(paintBackground.Color.Red, paintBackground.Color.Green, paintBackground.Color.Blue, (byte)50);
+
+            paintBackground.Color = new SKColor(
+                paintBackground.Color.Red,
+                paintBackground.Color.Green,
+                paintBackground.Color.Blue,
+                50);
         }
-
-
-        private SKRect rect;
-        private SKPaint paint;
-        private SKPaint paintBackground;
-        private float _easing = 0;
-        private float _rotate = 0;
-        const int padding = 2;
-        private Stopwatch time = new Stopwatch();
-        private TimeSpan drawInterval = TimeSpan.FromMilliseconds(30);
-        private double currentProgress;
-        private double value;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Canvas_PaintSurface(object sender, SkiaSharp.Views.Forms.SKPaintSurfaceEventArgs e)
+        /// <param name="args"></param>
+        private void CanvasPaintSurface(object sender, SKPaintSurfaceEventArgs args)
         {
-            time.Stop();
+            _time.Stop();
 
-            float a = (float)Math.Max(0.1, Math.Min(10, time.ElapsedMilliseconds / drawInterval.TotalMilliseconds));
+            // Elapsed milliseconds from previous view draw
+            float elapsed = (float)Math.Max(0.1, Math.Min(10, _time.ElapsedMilliseconds / _drawInterval.TotalMilliseconds));
 
-            time.Reset();
-            time.Start();
+            _time.Reset();
+            _time.Start();
 
             if (Easing || Spin)
             {
-                _easing += 0.05f * a;
+                _easing += 0.05f * elapsed;
                 _easing = Math.Min(1, _easing);
             }
             else
@@ -226,7 +249,7 @@ namespace Xamarin.Forms.Controls
 
             if (Spin)
             {
-                _rotate += 8f * a;
+                _rotate += 8f * elapsed;
 
                 if (_rotate > 360)
                     _rotate = _rotate - 360;
@@ -236,55 +259,52 @@ namespace Xamarin.Forms.Controls
                 _rotate = 0;
             }
 
-
-            if (Progress != this.value || (Spin && Progress > 0 && Progress < 100) || (Easing && _easing > 0 && _easing < 1))
+            if (Progress != _value
+                || (Spin && Progress > 0 && Progress < 100)
+                || (Easing && _easing > 0 && _easing < 1))
             {
-                Device.StartTimer(drawInterval, () =>
+                Device.StartTimer(_drawInterval, () =>
                 {
-                    this.canvas.InvalidateSurface();
+                    canvas.InvalidateSurface();
                     return false;
                 });
             }
 
+            args.Surface.Canvas.Clear();
 
+            frame.Size = new SKSize(
+                args.Info.Width - paint.StrokeWidth - PADDING,
+                args.Info.Height - paint.StrokeWidth - PADDING);
 
-            var canvas = e.Surface.Canvas;
-            canvas.Clear();
+            frame.Location = new SKPoint(
+                paint.StrokeWidth / 2,
+                paint.StrokeWidth / 2);
 
-            rect.Size = new SKSize(e.Info.Width - paint.StrokeWidth - padding, e.Info.Height - paint.StrokeWidth - padding);
-            rect.Location = new SKPoint(paint.StrokeWidth / 2, paint.StrokeWidth / 2);
+            float delta = ((float)Progress - _currentProgress) * (float)Xamarin.Forms.Easing.CubicInOut.Ease(_easing);
 
+            _value = _currentProgress + delta;
 
-            double delta = (this.Progress - currentProgress) * (float)Xamarin.Forms.Easing.CubicInOut.Ease(_easing);
-            this.value = currentProgress + delta;
-
-            double _angle = value / 100d * 360d;
-
-            double _startAngle = _rotate + 270;
-            double _sweepAngle = _angle;
+            float startAngle = _rotate + 270f;
+            float sweepAngle = _value / 100f * 360f;
 
             SKPath path = new SKPath();
-            path.AddArc(rect, (float)_startAngle, (float)_sweepAngle);
+            path.AddArc(frame, startAngle, sweepAngle);
 
             SKPath pathBackground = new SKPath();
-            pathBackground.AddArc(rect, 0, 360);
+            pathBackground.AddArc(frame, 0, 360);
 
-            canvas.DrawPath(path, paint);
-            canvas.DrawPath(pathBackground, paintBackground);
+            args.Surface.Canvas.DrawPath(path, paint);
+            args.Surface.Canvas.DrawPath(pathBackground, paintBackground);
         }
 
 
         /// <summary>
+        /// Converts Xamarin units into pixels.
         /// https://stackoverflow.com/a/63615455/6499748
         /// </summary>
-        /// <param name="XamDIU"></param>
-        /// <returns></returns>
-        private static double XamDIUConvertToPixels(double XamDIU)
-        {
-            var k = DeviceDisplay.MainDisplayInfo.Density / 2d;
-            var pixcels = k * XamDIU;
-            return pixcels;
-        }
-
+        /// <param name="value">Xamarin units.</param>
+        /// <returns>Value in pixel</returns>
+        private static double ConvertToPixels(double value)
+            => (DeviceDisplay.MainDisplayInfo.Density / 2d) * value;
     }
 }
